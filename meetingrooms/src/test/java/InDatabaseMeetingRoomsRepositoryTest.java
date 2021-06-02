@@ -1,4 +1,5 @@
 import org.flywaydb.core.Flyway;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mariadb.jdbc.MariaDbDataSource;
@@ -12,27 +13,31 @@ import static org.junit.jupiter.api.Assertions.*;
 class InDatabaseMeetingRoomsRepositoryTest {
 
     InDatabaseMeetingRoomsRepository repo;
-    private JdbcTemplate jdbcTemplate;
+    static JdbcTemplate jdbcTemplate;
+    static MariaDbDataSource mariaDbDataSource;
 
 
-    @BeforeEach
-    void init() {
+    @BeforeAll
+    static void init() {
         try {
-            MariaDbDataSource mariaDbDataSource = new MariaDbDataSource();
+            mariaDbDataSource = new MariaDbDataSource();
             mariaDbDataSource.setUrl("jdbc:mariadb://localhost:3306/meetingrooms?useUnicode=true");
             mariaDbDataSource.setUser("meetingroomuser");
             mariaDbDataSource.setPassword("user");
-
-            jdbcTemplate = new JdbcTemplate(mariaDbDataSource);
-
-            Flyway flyway = Flyway.configure().dataSource(mariaDbDataSource).load();
-            flyway.clean();
-            flyway.migrate();
-
-        } catch (SQLException sqle) {
-            throw new IllegalStateException("Cannot create datasource");
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
         }
 
+        jdbcTemplate = new JdbcTemplate(mariaDbDataSource);
+
+    }
+
+
+    @BeforeEach
+    void initEach() {
+        Flyway flyway = Flyway.configure().dataSource(mariaDbDataSource).load();
+        flyway.clean();
+        flyway.migrate();
         repo =  new InDatabaseMeetingRoomsRepository();
         repo.save("Himalája", 5,5);
     }
