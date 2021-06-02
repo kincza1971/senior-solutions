@@ -1,5 +1,4 @@
-import com.sun.source.tree.TryTree;
-
+import java.util.List;
 import java.util.Scanner;
 
 public class MeetingRoomsController {
@@ -19,7 +18,8 @@ public class MeetingRoomsController {
 
     private final Scanner scr = new Scanner(System.in);
 
-    private final MeetingRoomsServices service = new MeetingRoomsServices(new InMemoryMeetingRoomsRepository());
+    //private final MeetingRoomsServices service = new MeetingRoomsServices(new InMemoryMeetingRoomsRepository());
+    private final MeetingRoomsServices service = new MeetingRoomsServices(new InDatabaseMeetingRoomsRepository());
 
     private void printMenu() {
         System.out.println(MENU_TO_PRINT);
@@ -32,44 +32,55 @@ public class MeetingRoomsController {
     private void callSelected(String selected) {
 
         switch (selected) {
-            case "0":
-                getAndSaveMeetingRoomData();
-                break;
-            case "1":
-                System.out.println(service.getNames());
-                break;
-            case "2":
-                System.out.println(service.getNamesReversed());
-                break;
-            case "3":
-                System.out.println(service.getNamesEven());
-                break;
-            case "4":
-                System.out.println(service.getAreas());
-                break;
-            case "5":
-                findByName();
-                break;
-            case "6":
-                System.out.println(service.findByNamePart("a"));
-                break;
-            case "7":
-                System.out.println(service.findGreater(80));
-                break;
-
+            case "0" -> getAndSaveMeetingRoomData();
+            case "1" -> System.out.println(service.getNames());
+            case "2" -> System.out.println(service.getNamesReversed());
+            case "3" -> System.out.println(service.getNamesEven());
+            case "4" -> System.out.println(service.getAreas());
+            case "5" -> findByName();
+            case "6" -> findByNamePart();
+            case "7" -> findGreater();
         }
     }
 
     private void findByName() {
         System.out.println("Kérem adja meg a keresett tárgyaló nevét:");
         String name = scr.nextLine();
-        if (!checkName(name)) {
+        if (badName(name)) {
             return;
         }
         MeetingRoom found = service.findByName(name);
         if (found != null) {
             System.out.println(found);
         }
+    }
+
+    private void findByNamePart() {
+        System.out.println("Kérem adja meg a keresett tárgyaló nevrészletét:");
+        String name = scr.nextLine();
+        if (badName(name)) {
+            return;
+        }
+        List<String> found = service.findByNamePart(name);
+        if (!found.isEmpty()) {
+            System.out.println(found);
+        }
+    }
+
+    private void findGreater() {
+        System.out.println("Kérem adja meg a területet, aminél nagyobb tárgyalót keres:");
+        String sizeLimitStr = scr.nextLine();
+        int sizeLimit;
+        try {
+            sizeLimit = Integer.parseInt(sizeLimitStr);
+            if (sizeLimit <0) {
+                throw new NumberFormatException();
+            }
+        } catch (NumberFormatException ne) {
+            System.out.println("Érvénytelen adat - a terület kötelezően pozitív egész szám");
+            return;
+        }
+        System.out.println(service.findGreater(sizeLimit));
     }
 
     private void getAndSaveMeetingRoomData() {
@@ -81,21 +92,21 @@ public class MeetingRoomsController {
         String length = scr.nextLine();
         System.out.println("Név=" + name + ", Szélesség=" + width + ", Hossz="+length);
         System.out.println("Helyesek az adatok?  (I/N)");
-        if (scr.nextLine().trim().toUpperCase().equals("I")) {
+        if (scr.nextLine().trim().equalsIgnoreCase("I")) {
             convertAndSave(name, width, length);
         }
     }
 
-    private boolean checkName(String name) {
+    private boolean badName(String name) {
         if (name == null || name.isBlank()) {
             System.out.println("Érvénytelen adat - a név megadása kötelező");
-            return false;
+            return true;
         }
-        return true;
+        return false;
     }
 
     private void convertAndSave(String name, String width, String length) {
-        if (!checkName(name)) {
+        if (badName(name)) {
             return;
         }
         try {

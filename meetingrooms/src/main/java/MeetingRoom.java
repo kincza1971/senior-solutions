@@ -43,13 +43,13 @@ public class MeetingRoom {
 
     @Override
     public String toString() {
-        return "MeetingRoom{" +
-                "name='" + name + '\'' +
-                ", roomId=" + roomId +
-                ", width=" + width +
-                ", length=" + length +
-                ", area=" + area +
-                '}';
+        return "{" +
+                "név='" + name + '\'' +
+                ", azonosító=" + roomId +
+                ", szélesség=" + width +
+                ", Hosszúság=" + length +
+                ", terület=" + area +
+                '}' + System.lineSeparator();
     }
 }
 

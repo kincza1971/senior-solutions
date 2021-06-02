@@ -8,22 +8,15 @@ import java.util.stream.IntStream;
 
 public class InMemoryMeetingRoomsRepository implements MeetingRoomsRepository{
 
-    private List<MeetingRoom> rooms =  new ArrayList<>();
-    private int aktRoomId =0;
-    private Locale locale = new Locale("hu","HU");
-    private final Comparator<String> comparator = new Comparator<String>() {
-        @Override
-        public int compare(String o1, String o2) {
-            return Collator.getInstance(locale).compare(o1,o2);
-        }
-    };
+    private final List<MeetingRoom> rooms =  new ArrayList<>();
 
-    private final Comparator<String> comparatorReverse = new Comparator<String>() {
-        @Override
-        public int compare(String o1, String o2) {
-            return Collator.getInstance(locale).compare(o2,o1);
-        }
-    };
+    private final Locale locale = new Locale("hu","HU");
+
+    private final Comparator<String> comparator = (o1, o2) -> Collator.getInstance(locale).compare(o1,o2);
+
+    private final Comparator<String> comparatorReverse = (o1, o2) -> Collator.getInstance(locale).compare(o2,o1);
+
+    private int aktRoomId =0;
 
     @Override
     public void save(String name, int width, int length) throws IllegalArgumentException,IllegalStateException{
@@ -49,13 +42,12 @@ public class InMemoryMeetingRoomsRepository implements MeetingRoomsRepository{
 
     @Override
     public List<String> getNamesEven() {
-
         List<String> sortedList = rooms.stream()
                 .map(MeetingRoom::getName)
                 .sorted(comparator)
                 .collect(Collectors.toList());
 
-        return IntStream.range(0, sortedList.size())
+        return IntStream.range(0, sortedList.size()-1)
                 .filter(i -> i % 2 !=0)
                 .mapToObj(sortedList::get)
                 .collect(Collectors.toList());
