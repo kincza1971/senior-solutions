@@ -1,4 +1,5 @@
 
+
 CREATE TABLE IF NOT EXISTS `meetingrooms` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) COLLATE utf8mb3_hungarian_ci NOT NULL,

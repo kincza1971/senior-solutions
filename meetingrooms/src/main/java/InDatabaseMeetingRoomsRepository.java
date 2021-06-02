@@ -57,7 +57,7 @@ public class InDatabaseMeetingRoomsRepository implements MeetingRoomsRepository{
         List<String> found = jdbcTemplate.query("SELECT name FROM meetingrooms ORDER BY NAME",
                 (rs,i) -> rs.getString("name")
         );
-        return IntStream.range(0,found.size()-1)
+        return IntStream.range(0,found.size())
                 .filter(i -> i%2 != 0)
                 .mapToObj(found::get)
                 .collect(Collectors.toList());
@@ -65,7 +65,7 @@ public class InDatabaseMeetingRoomsRepository implements MeetingRoomsRepository{
 
     @Override
     public List<MeetingRoom> getAreas() {
-        return jdbcTemplate.query("SELECT id, name, width, length, area FROM meetingrooms ORDER BY NAME"
+        return jdbcTemplate.query("SELECT id, name, width, length, area FROM meetingrooms ORDER BY area DESC"
                 ,(rs, i) -> meetingRoomFactory(rs)
         );
     }

@@ -47,7 +47,7 @@ public class InMemoryMeetingRoomsRepository implements MeetingRoomsRepository{
                 .sorted(comparator)
                 .collect(Collectors.toList());
 
-        return IntStream.range(0, sortedList.size()-1)
+        return IntStream.range(0, sortedList.size())
                 .filter(i -> i % 2 !=0)
                 .mapToObj(sortedList::get)
                 .collect(Collectors.toList());
@@ -55,7 +55,10 @@ public class InMemoryMeetingRoomsRepository implements MeetingRoomsRepository{
 
     @Override
     public List<MeetingRoom> getAreas() {
-        return List.copyOf(rooms);
+        List<MeetingRoom> result = rooms.stream()
+                .sorted((o1, o2) -> Integer.compare(o2.getArea(),o1.getArea()))
+                .collect(Collectors.toList());
+        return List.copyOf(result);
     }
 
     @Override

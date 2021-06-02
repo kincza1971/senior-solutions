@@ -1,3 +1,5 @@
+import java.util.Objects;
+
 public class MeetingRoom {
 
     private final int roomId;
@@ -45,11 +47,23 @@ public class MeetingRoom {
     public String toString() {
         return "{" +
                 "név='" + name + '\'' +
-                ", azonosító=" + roomId +
                 ", szélesség=" + width +
                 ", Hosszúság=" + length +
                 ", terület=" + area +
                 '}' + System.lineSeparator();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MeetingRoom that = (MeetingRoom) o;
+        return getWidth() == that.getWidth() && getLength() == that.getLength() && getArea() == that.getArea() && getName().equals(that.getName());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getName(), getWidth(), getLength(), getArea());
     }
 }
 
