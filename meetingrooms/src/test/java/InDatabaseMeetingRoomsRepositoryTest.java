@@ -46,7 +46,6 @@ class InDatabaseMeetingRoomsRepositoryTest {
     void testSave() {
 
         List<String> result = repo.getNames();
-        System.out.println(result);
 
         assertEquals("Ábrahám", result.get(0));
         assertEquals("Benjámin", result.get(1));
@@ -99,7 +98,6 @@ class InDatabaseMeetingRoomsRepositoryTest {
     @Test
     void findByNamePart() {
         List<String> result = repo.findByNamePart("LÁJ");
-        System.out.println(result);
         assertEquals("{név='Himalája', szélesség=5, Hosszúság=5, terület=25}" + System.lineSeparator(),result.get(0));
     }
 
