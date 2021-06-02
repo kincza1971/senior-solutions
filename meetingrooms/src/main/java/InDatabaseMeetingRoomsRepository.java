@@ -10,10 +10,6 @@ import java.util.stream.IntStream;
 
 public class InDatabaseMeetingRoomsRepository implements MeetingRoomsRepository{
 
-    public static final String EVEN_QUERY =
-            "SET '@counter' := 0; " +
-                    "SELECT name FROM (SELECT ('@counter' := '@counter' + 1) AS counter, mr.name FROM " +
-                    "(select name from meetingrooms ORDER BY NAME) mr) t WHERE counter MOD 2 = 0;" ;
 
     private JdbcTemplate jdbcTemplate;
 
