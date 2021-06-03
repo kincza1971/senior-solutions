@@ -24,7 +24,6 @@ public class InDatabaseMeetingRoomsRepository implements MeetingRoomsRepository{
             jdbcTemplate = new JdbcTemplate(mariaDbDataSource);
 
             Flyway flyway = Flyway.configure().dataSource(mariaDbDataSource).load();
-            flyway.clean();
             flyway.migrate();
 
         } catch (SQLException sqle) {
