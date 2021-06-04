@@ -8,13 +8,13 @@ import java.util.stream.IntStream;
 
 public class InMemoryMeetingRoomsRepository implements MeetingRoomsRepository{
 
-    private final List<MeetingRoom> rooms =  new ArrayList<>();
+    private static final List<MeetingRoom> rooms =  new ArrayList<>();
 
-    private final Locale locale = new Locale("hu","HU");
+    private static final Locale locale = new Locale("hu","HU");
 
-    private final Comparator<String> comparator = (o1, o2) -> Collator.getInstance(locale).compare(o1,o2);
+    private static final Comparator<String> COMPARATOR_HU = (o1, o2) -> Collator.getInstance(locale).compare(o1,o2);
 
-    private final Comparator<String> comparatorReverse = (o1, o2) -> Collator.getInstance(locale).compare(o2,o1);
+    private static final Comparator<String> COMPARATOR_HU_REVERSE = (o1, o2) -> Collator.getInstance(locale).compare(o2,o1);
 
     private int aktRoomId =0;
 
@@ -28,7 +28,7 @@ public class InMemoryMeetingRoomsRepository implements MeetingRoomsRepository{
     public List<String> getNames() {
         return rooms.stream()
                 .map(MeetingRoom::getName)
-                .sorted(comparator)
+                .sorted(COMPARATOR_HU)
                 .collect(Collectors.toList());
     }
 
@@ -36,7 +36,7 @@ public class InMemoryMeetingRoomsRepository implements MeetingRoomsRepository{
     public List<String> getNamesReversed() {
         return rooms.stream()
                 .map(MeetingRoom::getName)
-                .sorted(comparatorReverse)
+                .sorted(COMPARATOR_HU_REVERSE)
                 .collect(Collectors.toList());
     }
 
@@ -44,7 +44,7 @@ public class InMemoryMeetingRoomsRepository implements MeetingRoomsRepository{
     public List<String> getNamesEven() {
         List<String> sortedList = rooms.stream()
                 .map(MeetingRoom::getName)
-                .sorted(comparator)
+                .sorted(COMPARATOR_HU)
                 .collect(Collectors.toList());
 
         return IntStream.range(0, sortedList.size())
@@ -77,7 +77,7 @@ public class InMemoryMeetingRoomsRepository implements MeetingRoomsRepository{
         return rooms.stream()
                 .filter(m -> m.getName().toLowerCase(locale).contains(namePart.toLowerCase(locale)))
                 .map(MeetingRoom::toString)
-                .sorted(comparator)
+                .sorted(COMPARATOR_HU)
                 .collect(Collectors.toList());
     }
 
@@ -86,7 +86,7 @@ public class InMemoryMeetingRoomsRepository implements MeetingRoomsRepository{
         return rooms.stream()
                 .filter(m -> m.getArea()>sizeLimit)
                 .map(MeetingRoom::toString)
-                .sorted(comparator)
+                .sorted(COMPARATOR_HU)
                 .collect(Collectors.toList());
     }
 }
