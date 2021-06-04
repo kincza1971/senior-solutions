@@ -82,21 +82,30 @@ public class InDatabaseMeetingRoomsRepository implements MeetingRoomsRepository{
 
     @Override
     public List<String> findByNamePart(String namePart) {
-        namePart = "%"+namePart+"%";
-        List<MeetingRoom>  found = jdbcTemplate.query("SELECT id, name, width, length, area from meetingrooms Where name like ?",
-                new Object[]{namePart.toLowerCase()},
-                (rs, i) ->  meetingRoomFactory(rs));
-        return convertToStringList(found);
+        namePart = "%"+namePart.toLowerCase()+"%";
+        return jdbcTemplate.query("SELECT id, name, width, length, area from meetingrooms Where name like ?",
+                new Object[]{namePart},
+                (rs, i) ->  stringBeautifier(rs));
     }
 
     @Override
     public List<String> findGreater(int sizeLimit) {
-        List<MeetingRoom>  found = jdbcTemplate.query("SELECT id, name, width, length, area from meetingrooms Where area > ?",
+        return jdbcTemplate.query("SELECT id, name, width, length, area from meetingrooms Where area > ?",
                 new Object[]{sizeLimit},
-                (rs,i) ->  meetingRoomFactory(rs)
+                (rs,i) ->  stringBeautifier(rs)
         );
-        return convertToStringList(found);
     }
+
+    private String stringBeautifier(ResultSet rs) throws SQLException {
+        return "{" +
+                "név='" + rs.getString("name") + '\'' +
+                ", szélesség=" + rs.getInt("width") +
+                ", Hosszúság=" + rs.getInt("length") +
+                ", terület=" + rs.getInt("area") +
+                '}' + System.lineSeparator();
+
+    }
+
     private MeetingRoom meetingRoomFactory(ResultSet rs) throws SQLException {
         return new MeetingRoom(
                 rs.getInt("id"),
@@ -105,10 +114,5 @@ public class InDatabaseMeetingRoomsRepository implements MeetingRoomsRepository{
                 rs.getInt("length"),
                 rs.getInt("area")
         );
-    }
-    private List<String> convertToStringList(List<MeetingRoom> found) {
-        return found.stream()
-                .map(MeetingRoom::toString)
-                .collect(Collectors.toList());
     }
 }
