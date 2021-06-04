@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
 public class InDatabaseMeetingRoomsRepository implements MeetingRoomsRepository{
 
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     public InDatabaseMeetingRoomsRepository() {
 
@@ -28,7 +28,7 @@ public class InDatabaseMeetingRoomsRepository implements MeetingRoomsRepository{
             flyway.migrate();
 
         } catch (SQLException sqle) {
-            throw new IllegalStateException("Cannot create datasource");
+            throw new IllegalStateException("Cannot create datasource", sqle);
         }
     }
 

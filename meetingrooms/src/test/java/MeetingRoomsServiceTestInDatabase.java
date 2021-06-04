@@ -27,8 +27,8 @@ public class MeetingRoomsServiceTestInDatabase {
             mariaDbDataSource.setUrl("jdbc:mariadb://localhost:3306/meetingrooms?useUnicode=true");
             mariaDbDataSource.setUser("meetingroomuser");
             mariaDbDataSource.setPassword("user");
-        } catch (SQLException throwables) {
-            throwables.printStackTrace();
+        } catch (SQLException sqle) {
+            throw new IllegalStateException("Cannot create datatsource" , sqle);
         }
 
         jdbcTemplate = new JdbcTemplate(mariaDbDataSource);
