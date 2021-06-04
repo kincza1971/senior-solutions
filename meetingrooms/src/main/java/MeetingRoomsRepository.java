@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.Optional;
 
 public interface MeetingRoomsRepository {
     void save(String name, int width, int length);
@@ -6,7 +7,7 @@ public interface MeetingRoomsRepository {
     List<String> getNamesReversed();
     List<String> getNamesEven();
     List<MeetingRoom> getAreas();
-    MeetingRoom findByName(String name);
+    Optional<MeetingRoom> findByName(String name);
     List<String> findByNamePart(String namePart);
     List<String> findGreater(int sizeLimit);
 }

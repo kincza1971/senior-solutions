@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -80,8 +81,9 @@ class InDatabaseMeetingRoomsRepositoryTest {
 
     @Test
     void findByName() {
-        MeetingRoom result = repo.findByName("himaLÁJa");
-        assertEquals(new MeetingRoom(1,"Himalája",5,5,25),result);
+        Optional<MeetingRoom> result = repo.findByName("himaLÁJa");
+        assertTrue(result.isPresent());
+        result.ifPresent(meetingRoom -> assertEquals(new MeetingRoom(1, "Himalája", 5, 5, 25), meetingRoom));
     }
 
     @Test

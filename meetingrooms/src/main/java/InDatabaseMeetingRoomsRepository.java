@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -70,10 +71,12 @@ public class InDatabaseMeetingRoomsRepository implements MeetingRoomsRepository{
     }
 
     @Override
-    public MeetingRoom findByName(String name) {
-        return jdbcTemplate.queryForObject("SELECT id, name, width, length, area from meetingrooms Where name = ?",
-                new Object[]{name},
-                (rs, i) ->  meetingRoomFactory(rs)
+    public Optional<MeetingRoom> findByName(String name) {
+        return Optional.ofNullable(
+                jdbcTemplate.queryForObject("SELECT id, name, width, length, area from meetingrooms Where name = ?",
+                        new Object[]{name},
+                        (rs, i) ->  meetingRoomFactory(rs)
+                )
         );
     }
 

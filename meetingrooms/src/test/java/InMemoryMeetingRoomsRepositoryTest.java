@@ -3,6 +3,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -62,8 +63,9 @@ class InMemoryMeetingRoomsRepositoryTest {
 
     @Test
     void findByName() {
-        MeetingRoom result = repo.findByName("himaLÁJa");
-        assertEquals(new MeetingRoom(1,"Himalája",5,5,25),result);
+        Optional<MeetingRoom> result = repo.findByName("himaLÁJa");
+        assertTrue(result.isPresent());
+        result.ifPresent(meetingRoom -> assertEquals(new MeetingRoom(1, "Himalája", 5, 5, 25), meetingRoom));
     }
 
     @Test

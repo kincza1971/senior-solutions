@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.Optional;
 
 public class MeetingRoomsServices {
     private final MeetingRoomsRepository repo;
@@ -29,7 +30,7 @@ public class MeetingRoomsServices {
         return repo.getAreas();
     }
 
-    public MeetingRoom findByName(String name) {
+    public Optional<MeetingRoom> findByName(String name) {
         return repo.findByName(name);
     }
 

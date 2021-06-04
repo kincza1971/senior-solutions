@@ -1,8 +1,5 @@
 import java.text.Collator;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -57,19 +54,16 @@ public class InMemoryMeetingRoomsRepository implements MeetingRoomsRepository{
     public List<MeetingRoom> getAreas() {
         List<MeetingRoom> result = rooms.stream()
                 .sorted((o1, o2) -> Integer.compare(o2.getArea(),o1.getArea()))
-                .collect(Collectors.toList());
+                .toList();
         return List.copyOf(result);
     }
 
     @Override
-    public MeetingRoom findByName(String name) {
+    public Optional<MeetingRoom> findByName(String name) {
         List<MeetingRoom> filtered = rooms.stream()
                 .filter(m -> m.getName().toLowerCase(locale).equals(name.toLowerCase(locale)))
-                .collect(Collectors.toList());
-        if (filtered.isEmpty()) {
-            return null;
-        }
-        return filtered.get(0);
+                .toList();
+        return Optional.ofNullable(filtered.get(0));
     }
 
     @Override
@@ -78,7 +72,7 @@ public class InMemoryMeetingRoomsRepository implements MeetingRoomsRepository{
                 .filter(m -> m.getName().toLowerCase(locale).contains(namePart.toLowerCase(locale)))
                 .map(MeetingRoom::toString)
                 .sorted(COMPARATOR_HU)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

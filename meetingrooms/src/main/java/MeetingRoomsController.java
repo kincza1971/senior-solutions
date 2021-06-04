@@ -1,4 +1,5 @@
 import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class MeetingRoomsController {
@@ -49,10 +50,8 @@ public class MeetingRoomsController {
         if (badName(name)) {
             return;
         }
-        MeetingRoom found = service.findByName(name);
-        if (found != null) {
-            System.out.println(found);
-        }
+        Optional<MeetingRoom> isFound = service.findByName(name);
+        isFound.ifPresent(System.out::println);
     }
 
     private void findByNamePart() {
