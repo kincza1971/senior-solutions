@@ -1,12 +1,16 @@
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class MeetingRoom {
 
-    private final int roomId;
+    private int roomId;
     private final String name;
     private final int width;
     private final int length;
     private final int area;
+    private final List<Meeting> meetings = new ArrayList<>();
 
     public MeetingRoom(int roomId, String name, int width, int length, int area) {
         this.roomId = roomId;
@@ -17,6 +21,13 @@ public class MeetingRoom {
     }
     public MeetingRoom(int roomId, String name, int width, int length) {
         this.roomId = roomId;
+        this.name = name;
+        this.width = width;
+        this.length = length;
+        this.area = width * length;
+    }
+
+    public MeetingRoom(String name, int width, int length) {
         this.name = name;
         this.width = width;
         this.length = length;
@@ -43,6 +54,10 @@ public class MeetingRoom {
         return area;
     }
 
+    public List<Meeting> getMeetings() {
+        return List.copyOf(meetings);
+    }
+
     @Override
     public String toString() {
         return "{" +
@@ -65,6 +80,36 @@ public class MeetingRoom {
     public int hashCode() {
         return Objects.hash(getName(), getWidth(), getLength(), getArea());
     }
+
+    public boolean addMeetingIfFree(Meeting meeting) {
+        if (isFree (meeting)) {
+            meetings.add(meeting);
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isFree(Meeting meeting) {
+        return meetings
+                .stream()
+                .noneMatch(m -> isCollate(m,meeting));
+    }
+
+    private boolean isCollate(Meeting m1, Meeting m2) {
+        LocalDateTime m1Start = m1.getStartTime();
+        LocalDateTime m1End = m1.getEndTime();
+        LocalDateTime m2Start = m2.getStartTime();
+        LocalDateTime m2End = m2.getEndTime();
+        if (m1Start.isBefore(m2End) && m1End.isAfter(m2End)) {
+            return true;
+        }
+        if (m1Start.isBefore(m2Start) && m1End.isAfter(m2Start)) {
+            return true;
+        }
+        return m2Start.isBefore(m1Start) && m2End.isAfter(m1End);
+    }
+
+
 }
 
 //Tárgyalók nyilvántartása

@@ -14,10 +14,10 @@ class InMemoryMeetingRoomsRepositoryTest {
     @BeforeEach
     void init() {
         repo =  new InMemoryMeetingRoomsRepository();
-        repo.save("Himalája", 5,5);
-        repo.save("Mount Everest", 10,10);
-        repo.save("Kékestető", 4,4);
-        repo.save("Alpok",6,9);
+        repo.save(new MeetingRoom("Himalája", 5,5));
+        repo.save(new MeetingRoom("Mount Everest", 10,10));
+        repo.save(new MeetingRoom("Kékestető", 4,4));
+        repo.save(new MeetingRoom("Alpok",6,9));
   }
 
     @Test

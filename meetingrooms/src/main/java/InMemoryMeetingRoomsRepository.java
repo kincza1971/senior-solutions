@@ -16,8 +16,8 @@ public class InMemoryMeetingRoomsRepository implements MeetingRoomsRepository{
     private int aktRoomId =0;
 
     @Override
-    public void save(String name, int width, int length) throws IllegalArgumentException,IllegalStateException{
-        rooms.add(new MeetingRoom(aktRoomId+1, name, width, length));
+    public void save(MeetingRoom meetingRoom) throws IllegalArgumentException,IllegalStateException{
+        rooms.add(new MeetingRoom(aktRoomId+1, meetingRoom.getName(), meetingRoom.getWidth(), meetingRoom.getLength()));
         aktRoomId++;
     }
 

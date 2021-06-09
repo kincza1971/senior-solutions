@@ -2,22 +2,20 @@ import org.flywaydb.core.Flyway;
 import org.mariadb.jdbc.MariaDbDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class InDatabaseMeetingRoomsRepository implements MeetingRoomsRepository{
+    MariaDbDataSource mariaDbDataSource = new MariaDbDataSource();
 
 
     private final JdbcTemplate jdbcTemplate;
 
     public InDatabaseMeetingRoomsRepository() {
-
-        try {
-            MariaDbDataSource mariaDbDataSource = new MariaDbDataSource();
+         try {
             mariaDbDataSource.setUrl("jdbc:mariadb://localhost:3306/meetingrooms?useUnicode=true");
             mariaDbDataSource.setUser("meetingroomuser");
             mariaDbDataSource.setPassword("user");
@@ -33,9 +31,50 @@ public class InDatabaseMeetingRoomsRepository implements MeetingRoomsRepository{
     }
 
     @Override
-    public void save(String name, int width, int length) {
-        jdbcTemplate.update("insert into meetingrooms (name, width, length) values (?,?,?)",name,width,length);
+    public void save(MeetingRoom meetingRoom) {
+        try (Connection conn = mariaDbDataSource.getConnection())
+        {
+            try (
+                    PreparedStatement smt1 = conn.prepareStatement(
+                            "Insert into meetingrooms (name, width, length) values (?,?,?)", Statement.RETURN_GENERATED_KEYS);
+            )
+            {
+                smt1.setString(1, meetingRoom.getName());
+                smt1.setInt(2,meetingRoom.getWidth());
+                smt1.setInt(3,meetingRoom.getLength());
+                smt1.execute();
+                ResultSet rs = smt1.getGeneratedKeys();
+                saveMeetings(meetingRoom, conn, rs);
+            } catch (SQLException sqle) {
+                conn.rollback();
+                throw new IllegalStateException("Meetingroom mentése sikertelen ", sqle);
+            }
 
+        } catch (SQLException sqle) {
+            throw new IllegalStateException("Nem sikerült az adatbázishoz kapcsolódni", sqle);
+        }
+//        jdbcTemplate.update("insert into meetingrooms (name, width, length) values (?,?,?)",name,width,length);
+//
+    }
+
+    private void saveMeetings(MeetingRoom meetingRoom, Connection conn, ResultSet rs) throws SQLException {
+        int key =0;
+        if (rs.next()) {
+            key = rs.getInt(1);
+
+            for (Meeting meeting : meetingRoom.getMeetings()) {
+                try (PreparedStatement smt2 = conn.prepareStatement("INSERT INTO meetings (organizer, from_dt, to_dt, mr_id ) values (?,?,?,?)")) {
+                    smt2.setString(1,meeting.getOrganizer());
+                    smt2.setTimestamp(2,Timestamp.valueOf(meeting.getStartTime()));
+                    smt2.setTimestamp(3,Timestamp.valueOf(meeting.getEndTime()));
+                    smt2.setInt(3,key);
+                    smt2.execute();
+                } catch (SQLException sqle) {
+                    conn.rollback();
+                    throw new IllegalStateException("Cannot save meeting ", sqle);
+                }
+            }
+        }
     }
 
     @Override

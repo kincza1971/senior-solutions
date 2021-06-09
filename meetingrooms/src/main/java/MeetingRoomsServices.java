@@ -10,8 +10,12 @@ public class MeetingRoomsServices {
         this.repo = repo;
     }
 
+    public void save(MeetingRoom meetingRoom) {
+        repo.save(meetingRoom);
+    }
+
     public void save(String name, int width, int length) {
-        repo.save(name,width,length);
+        repo.save(new MeetingRoom(name, width, length));
     }
 
     public List<String> getNames() {

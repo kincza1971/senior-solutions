@@ -2,7 +2,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface MeetingRoomsRepository {
-    void save(String name, int width, int length);
+    void save(MeetingRoom meetingRoom);
     List<String> getNames();
     List<String> getNamesReversed();
     List<String> getNamesEven();

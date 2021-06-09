@@ -40,7 +40,7 @@ class InDatabaseMeetingRoomsRepositoryTest {
         flyway.clean();
         flyway.migrate();
         repo =  new InDatabaseMeetingRoomsRepository();
-        repo.save("Himalája", 5,5);
+        repo.save(new MeetingRoom("Himalája", 5,5));
     }
 
     @Test
