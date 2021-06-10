@@ -54,11 +54,10 @@ public class OrderService {
     }
 
     public Optional<Product> getOrderedProductByName(String name) {
-        List<Product> filtered = orders.stream()
+        return orders.stream()
                 .flatMap(o -> o.getProducts().stream())
                 .filter(p -> p.getName().equals(name))
-                .collect(Collectors.toList());
-        return Optional.ofNullable(filtered.get(0));
+                .findFirst();
     }
 
 }
