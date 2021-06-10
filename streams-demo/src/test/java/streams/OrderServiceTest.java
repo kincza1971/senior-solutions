@@ -5,6 +5,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -12,6 +13,7 @@ class OrderServiceTest implements PrintNameBeforeEach{
 
     OrderService ordersService = new OrderService() ;
 
+    Product p3;
 
     @BeforeEach
     public void init(){
@@ -19,7 +21,7 @@ class OrderServiceTest implements PrintNameBeforeEach{
 
         Product p1 = new Product("Tv","IT",2000);
         Product p2 = new Product("Laptop","IT",2400);
-        Product p3 = new Product("Phone","IT",400);
+        p3 = new Product("Phone","IT",400);
         Product p4 = new Product("Lord of The Rings","Book",20);
         Product p5 = new Product("Harry Potter Collection","Book",120);
 
@@ -64,5 +66,23 @@ class OrderServiceTest implements PrintNameBeforeEach{
         assertEquals("Laptop",ordersService.productsOverAmountPrice(2399).get(0).getName());
     }
 
+    @Test
+    @DisplayName("getTurnoverBetweenDates() - summarize turnover between to included date")
+    void testTurnoverBetween() {
+        double result = ordersService.getTurnoverBetweenDates(LocalDate.of(2021,6,6),LocalDate.of(2021,6,7));
+        assertEquals(8940.0,result);
+        result = ordersService.getTurnoverBetweenDates(LocalDate.of(2021,6,1),LocalDate.of(2021,6,6));
+        assertEquals(4800.0,result);
+    }
 
+    @Test
+    @DisplayName("getOrderedProductByName() - Find an ordered product by name")
+    void getOrderedProductByName() {
+        Optional<Product> result = ordersService.getOrderedProductByName("Phone");
+        if (result.isPresent()) {
+            assertEquals(p3, result.get());
+        } else {
+            fail();
+        }
+    }
 }
