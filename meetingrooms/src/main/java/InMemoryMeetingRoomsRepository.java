@@ -83,4 +83,9 @@ public class InMemoryMeetingRoomsRepository implements MeetingRoomsRepository{
                 .sorted(COMPARATOR_HU)
                 .collect(Collectors.toList());
     }
+
+    @Override
+    public List<String> getMeetings() {
+        return null;
+    }
 }

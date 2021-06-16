@@ -10,6 +10,7 @@ public interface MeetingRoomsRepository {
     Optional<MeetingRoom> findByName(String name);
     List<String> findByNamePart(String namePart);
     List<String> findGreater(int sizeLimit);
+    List<String> getMeetings();
 }
 
 //Tárgyaló rögzítése: kérd be az adatokat, és rögzítsd!

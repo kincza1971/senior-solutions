@@ -3,6 +3,7 @@ import org.mariadb.jdbc.MariaDbDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -67,7 +68,7 @@ public class InDatabaseMeetingRoomsRepository implements MeetingRoomsRepository{
                     smt2.setString(1,meeting.getOrganizer());
                     smt2.setTimestamp(2,Timestamp.valueOf(meeting.getStartTime()));
                     smt2.setTimestamp(3,Timestamp.valueOf(meeting.getEndTime()));
-                    smt2.setInt(3,key);
+                    smt2.setInt(4,key);
                     smt2.execute();
                 } catch (SQLException sqle) {
                     conn.rollback();
@@ -133,6 +134,46 @@ public class InDatabaseMeetingRoomsRepository implements MeetingRoomsRepository{
                 new Object[]{sizeLimit},
                 (rs,i) ->  stringBeautifier(rs)
         );
+    }
+
+    @Override
+    public List<String> getMeetings() {
+        try (Connection conn = mariaDbDataSource.getConnection();
+             PreparedStatement smnt = conn.prepareStatement(
+                     "SELECT r.name, m.organizer, m.from_dt, m.to_dt  FROM meetings m INNER JOIN meetingrooms r " +
+                             "ON m.mr_id = r.id " + "ORDER BY r.name;")
+        ){
+            ResultSet rs = smnt.executeQuery();
+            return rsBeautifier(rs);
+
+        } catch (SQLException sqle) {
+            throw new IllegalStateException("Cannot connect to database ", sqle);
+        }
+    }
+
+    private List<String> rsBeautifier(ResultSet rs) throws SQLException {
+        List<String> result= new ArrayList<>();
+        StringBuilder line;
+        String name = null;
+        String organizer = null;
+        String prevName =null;
+        while (rs.next()) {
+            name = rs.getString("name");
+            if (!(name).equals(prevName)) {
+                line =new StringBuilder();
+                line.append(name).append(System.lineSeparator());
+                result.add(line.toString());
+                prevName = name;
+            }
+            line = new StringBuilder();
+            line.append(" ".repeat(35));
+            organizer = rs.getString("organizer");
+            line.replace(5,organizer.length()+5,organizer).append("\t");
+            line.append(rs.getTimestamp("from_dt")).append("\t");
+            line.append(rs.getTimestamp("to_dt")).append(System.lineSeparator());
+            result.add(line.toString());
+        }
+        return result;
     }
 
     private String stringBeautifier(ResultSet rs) throws SQLException {

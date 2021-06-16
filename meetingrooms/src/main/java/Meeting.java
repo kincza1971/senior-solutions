@@ -22,6 +22,13 @@ public class Meeting {
         this.endTime = endTime;
     }
 
+    public Meeting(Meeting meeting, String mrName) {
+        this.meetingRoomName = mrName;
+        this.organizer = meeting.getOrganizer();
+        this.endTime = meeting.getEndTime();
+        this.startTime = meeting.getStartTime();
+    }
+
     public String getOrganizer() {
         return organizer;
     }

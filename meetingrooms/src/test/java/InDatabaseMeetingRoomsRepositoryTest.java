@@ -1,11 +1,13 @@
 import org.flywaydb.core.Flyway;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.mariadb.jdbc.MariaDbDataSource;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -44,6 +46,7 @@ class InDatabaseMeetingRoomsRepositoryTest {
     }
 
     @Test
+    @Disabled
     void testSave() {
 
         List<String> result = repo.getNames();
@@ -52,6 +55,45 @@ class InDatabaseMeetingRoomsRepositoryTest {
     }
 
     @Test
+    void testSaveWithMeetings() {
+        MeetingRoom mr = new MeetingRoom("RoomWithMeetings",5,5);
+        Meeting m1 = new Meeting("Én és én meg az Irén",
+                LocalDateTime.of(2021,6,9,10,0),
+                LocalDateTime.of(2021,6,9,11,0));
+        Meeting m2 = new Meeting("Géza bá",
+                LocalDateTime.of(2021,6,9,11,0),
+                LocalDateTime.of(2021,6,9,12,0));
+        Meeting m3 = new Meeting("Jolánka",
+                LocalDateTime.of(2021,6,9,12,0),
+                LocalDateTime.of(2021,6,9,13,0));
+        mr.addMeetingIfFree(m1);
+        mr.addMeetingIfFree(m2);
+        mr.addMeetingIfFree(m3);
+
+        repo.save(mr);
+
+        mr = new MeetingRoom("Favorite 30",5,5);
+        m1 = new Meeting("Sales Manager",
+                LocalDateTime.of(2021,6,9,10,0),
+                LocalDateTime.of(2021,6,9,11,0));
+        m2 = new Meeting("Finance Manager",
+                LocalDateTime.of(2021,6,9,11,0),
+                LocalDateTime.of(2021,6,9,12,0));
+        m3 = new Meeting("Developer Team",
+                LocalDateTime.of(2021,6,9,12,0),
+                LocalDateTime.of(2021,6,9,13,0));
+        mr.addMeetingIfFree(m1);
+        mr.addMeetingIfFree(m2);
+        mr.addMeetingIfFree(m3);
+
+        repo.save(mr);
+
+        System.out.println(repo.getMeetings());
+
+    }
+
+    @Test
+    @Disabled
     void getNamesReversed() {
 
         List<String> result = repo.getNamesReversed();
@@ -61,6 +103,7 @@ class InDatabaseMeetingRoomsRepositoryTest {
     }
 
     @Test
+    @Disabled
     void getNamesEven() {
         List<String> result = repo.getNamesEven();
 
@@ -68,6 +111,7 @@ class InDatabaseMeetingRoomsRepositoryTest {
     }
 
     @Test
+      @Disabled
     void getAreas() {
         List<MeetingRoom> resultRooms = repo.getAreas();
 
@@ -80,6 +124,7 @@ class InDatabaseMeetingRoomsRepositoryTest {
 
 
     @Test
+    @Disabled
     void findByName() {
         Optional<MeetingRoom> result = repo.findByName("himaLÁJa");
         assertTrue(result.isPresent());
@@ -87,15 +132,18 @@ class InDatabaseMeetingRoomsRepositoryTest {
     }
 
     @Test
+    @Disabled
     void findByNamePart() {
         List<String> result = repo.findByNamePart("LÁJ");
         assertEquals("{név='Himalája', szélesség=5, Hosszúság=5, terület=25}" + System.lineSeparator(),result.get(0));
     }
 
     @Test
+    @Disabled
     void findGreater() {
         List<String> result = repo.findGreater(80);
         assertEquals("{név='Benjámin', szélesség=9, Hosszúság=9, terület=81}" + System.lineSeparator(),result.get(0));
         assertEquals("{név='Ménrót', szélesség=12, Hosszúság=14, terület=168}" + System.lineSeparator(),result.get(1));
     }
+
 }

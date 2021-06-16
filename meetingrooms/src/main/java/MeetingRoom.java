@@ -83,7 +83,7 @@ public class MeetingRoom {
 
     public boolean addMeetingIfFree(Meeting meeting) {
         if (isFree (meeting)) {
-            meetings.add(meeting);
+            meetings.add(new Meeting(meeting,getName()));
             return true;
         }
         return false;
