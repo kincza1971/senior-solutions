@@ -99,6 +99,22 @@ public class Location {
                 ,0.0,0.0
         );
     }
+
+    @Override
+    public String toString() {
+        return "Location{" +
+                "name='" + name + '\'' +
+                '}';
+    }
+
+    public String toCsv() {
+        StringBuilder sb = new StringBuilder();
+        return sb
+                .append(getName()).append(",")
+                .append(getLat()).append(",")
+                .append(getLon())
+                .toString();
+    }
 }
 //Hozz létre egy Locationosztályt, name, lat, lonattribútumokkal! A nameattribútum Stringtípusú legyen!
 // A szélességi és hosszúsági koordinátákat külön doubletípusú attribútummal ábrázold!Legyenek getter/setter metódusai,
