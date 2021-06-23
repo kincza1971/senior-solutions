@@ -9,18 +9,16 @@ public class DistanceService {
         this.repo = repo;
     }
 
+    Optional<Location> findByName(String name) {
+        return repo.findByName(name);
+    }
+
     Optional<Double> calculateDistance(String name1, String name2) {
-
-        Optional<Location> location1 = repo.findByName(name1);
-        if (!location1.isPresent()) {
-            return Optional.empty();
+        Optional<Location> opt1 =  repo.findByName(name1);
+        Optional<Location> opt2 =   repo.findByName(name2);
+        if(opt1.isPresent() && opt2.isPresent()) {
+            return Optional.of(opt1.get().distanceFrom(opt2.get()));
         }
-
-        Optional<Location> location2 = repo.findByName(name1);
-        if (!location2.isPresent()) {
-            return Optional.empty();
-        }
-
-        return Optional.of(location1.get().distanceFrom(location2.get()));
+        return Optional.empty();
     }
 }
