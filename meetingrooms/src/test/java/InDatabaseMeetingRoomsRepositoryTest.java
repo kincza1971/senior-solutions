@@ -46,7 +46,6 @@ class InDatabaseMeetingRoomsRepositoryTest {
     }
 
     @Test
-    @Disabled
     void testSave() {
 
         List<String> result = repo.getNames();
@@ -93,7 +92,6 @@ class InDatabaseMeetingRoomsRepositoryTest {
     }
 
     @Test
-    @Disabled
     void getNamesReversed() {
 
         List<String> result = repo.getNamesReversed();
@@ -103,7 +101,6 @@ class InDatabaseMeetingRoomsRepositoryTest {
     }
 
     @Test
-    @Disabled
     void getNamesEven() {
         List<String> result = repo.getNamesEven();
 
@@ -111,7 +108,6 @@ class InDatabaseMeetingRoomsRepositoryTest {
     }
 
     @Test
-      @Disabled
     void getAreas() {
         List<MeetingRoom> resultRooms = repo.getAreas();
 
@@ -124,7 +120,6 @@ class InDatabaseMeetingRoomsRepositoryTest {
 
 
     @Test
-    @Disabled
     void findByName() {
         Optional<MeetingRoom> result = repo.findByName("himaLÁJa");
         assertTrue(result.isPresent());
@@ -132,14 +127,12 @@ class InDatabaseMeetingRoomsRepositoryTest {
     }
 
     @Test
-    @Disabled
     void findByNamePart() {
         List<String> result = repo.findByNamePart("LÁJ");
         assertEquals("{név='Himalája', szélesség=5, Hosszúság=5, terület=25}" + System.lineSeparator(),result.get(0));
     }
 
     @Test
-    @Disabled
     void findGreater() {
         List<String> result = repo.findGreater(80);
         assertEquals("{név='Benjámin', szélesség=9, Hosszúság=9, terület=81}" + System.lineSeparator(),result.get(0));

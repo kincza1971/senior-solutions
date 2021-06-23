@@ -11,6 +11,7 @@ class InMemoryMeetingRoomsRepositoryTest {
 
     InMemoryMeetingRoomsRepository repo;
 
+
     @BeforeEach
     void init() {
         repo =  new InMemoryMeetingRoomsRepository();
@@ -78,6 +79,7 @@ class InMemoryMeetingRoomsRepositoryTest {
     @Test
     void findGreater() {
         List<String> result = repo.findGreater(53);
+        System.out.println(result);
         assertEquals("{név='Alpok', szélesség=6, Hosszúság=9, terület=54}" + System.lineSeparator(),result.get(0));
         assertEquals("{név='Mount Everest', szélesség=10, Hosszúság=10, terület=100}" + System.lineSeparator(),result.get(1));
     }
