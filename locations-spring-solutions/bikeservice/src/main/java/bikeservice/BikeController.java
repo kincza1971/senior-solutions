@@ -1,0 +1,35 @@
+package bikeservice;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
+
+@RestController
+public class BikeController {
+
+    BikeService service;
+
+    public BikeController(BikeService service) {
+        this.service = service;
+    }
+
+
+    @GetMapping("/")
+    public String sayHello() {
+        return ("Hello bikes");
+    }
+
+    @GetMapping("/history")
+    public List<Bike> getBikes() {
+        return service.getBikes();
+    }
+
+    @GetMapping("/users")
+    public List<String> getUsers(){
+        return service.getUsers();
+    }
+
+}
