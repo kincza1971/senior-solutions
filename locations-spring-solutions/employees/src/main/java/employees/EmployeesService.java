@@ -41,8 +41,8 @@ public class EmployeesService {
     public EmployeeDto findEmployeeById(Long id) {
         Employee found = employees.stream()
                 .filter(employee1 -> employee1.getId()==id)
-                .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("Cannot find employee with this ID " +id));
+                .findFirst()
+                .orElseThrow(() -> new EmployeeNotFoundException("Cannot find employee with this ID " +id));
         return modelMapper.map(found,EmployeeDto.class);
     }
 
@@ -50,5 +50,25 @@ public class EmployeesService {
         Employee newEmployee = new Employee(idGenerator.incrementAndGet(),command.getName());
         employees.add(newEmployee);
         return modelMapper.map(newEmployee,EmployeeDto.class);
+    }
+
+    public EmployeeDto updateEmployee(Long id, UpdateEmployeeCommand command) {
+        Employee employee = employees
+                .stream()
+                .filter(e -> e.getId()==id)
+                .findAny()
+                .orElseThrow(() -> new EmployeeNotFoundException("Cannot find employee with this id: " +id));
+        employee.setName(command.getName());
+        return modelMapper.map(employee,EmployeeDto.class);
+    }
+
+    public void deleteEmployee(Long id) {
+        Iterator<Employee> employeeIterator = employees.iterator();
+        Employee employee = employees
+                .stream()
+                .filter(e -> e.getId()==id)
+                .findAny()
+                .orElseThrow(() -> new EmployeeNotFoundException("Cannot find employee with this id: " +id));
+        employees.remove(employee);
     }
 }

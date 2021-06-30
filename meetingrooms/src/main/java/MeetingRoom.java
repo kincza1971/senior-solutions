@@ -10,7 +10,7 @@ public class MeetingRoom {
     private final int width;
     private final int length;
     private final int area;
-    private final List<Meeting> meetings = new ArrayList<>();
+    private List<Meeting> meetings = new ArrayList<>();
 
     public MeetingRoom(int roomId, String name, int width, int length, int area) {
         this.roomId = roomId;
@@ -82,7 +82,7 @@ public class MeetingRoom {
     }
 
     public boolean addMeetingIfFree(Meeting meeting) {
-        if (isFree (meeting)) {
+        if (isFree(meeting)) {
             meetings.add(new Meeting(meeting,getName()));
             return true;
         }

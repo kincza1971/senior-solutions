@@ -1,6 +1,6 @@
 
 ###
-GET http://localhost:8080/api/employees
+GET http://localhost:8080/api/employees/3
 Accept: application/json
 
 ###
@@ -11,3 +11,16 @@ Accept: application/json
 {
   "name": "Jane Doe"
 }
+
+###
+PUT http://localhost:8080/api/employees/3
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "Jonatan Doe"
+}
+
+###
+DELETE http://localhost:8080/api/employees/4
+

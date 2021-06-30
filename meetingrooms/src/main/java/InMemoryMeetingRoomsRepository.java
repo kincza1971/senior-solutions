@@ -1,25 +1,20 @@
 import java.text.Collator;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class InMemoryMeetingRoomsRepository implements MeetingRoomsRepository{
 
-    private static final List<MeetingRoom> rooms =  new ArrayList<>();
+    private final List<MeetingRoom> rooms =  new ArrayList<>();
 
-    private static final Locale locale = new Locale("hu","HU");
+    private final Locale locale = new Locale("hu","HU");
 
-    private static final Comparator<String> COMPARATOR_HU = (o1, o2) -> Collator.getInstance(locale).compare(o1,o2);
+    private final Comparator<String> COMPARATOR_HU = (o1, o2) -> Collator.getInstance(locale).compare(o1,o2);
 
-    private static final Comparator<String> COMPARATOR_HU_REVERSE = (o1, o2) -> Collator.getInstance(locale).compare(o2,o1);
+    private final Comparator<String> COMPARATOR_HU_REVERSE = (o1, o2) -> Collator.getInstance(locale).compare(o2,o1);
 
-    private int aktRoomId =0;
-
-    @Override
-    public void save(MeetingRoom meetingRoom) throws IllegalArgumentException,IllegalStateException{
-        rooms.add(new MeetingRoom(aktRoomId+1, meetingRoom.getName(), meetingRoom.getWidth(), meetingRoom.getLength()));
-        aktRoomId++;
-    }
+    private AtomicInteger igGenerator = new AtomicInteger();
 
     @Override
     public List<String> getNames() {
@@ -27,6 +22,10 @@ public class InMemoryMeetingRoomsRepository implements MeetingRoomsRepository{
                 .map(MeetingRoom::getName)
                 .sorted(COMPARATOR_HU)
                 .collect(Collectors.toList());
+    }
+    @Override
+    public void save(MeetingRoom meetingRoom) {
+        rooms.add(new MeetingRoom(igGenerator.incrementAndGet(), meetingRoom.getName(), meetingRoom.getWidth(), meetingRoom.getLength()));
     }
 
     @Override
