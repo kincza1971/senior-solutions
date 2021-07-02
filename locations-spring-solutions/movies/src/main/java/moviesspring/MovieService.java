@@ -2,6 +2,7 @@ package moviesspring;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.lang.reflect.Type;
@@ -22,12 +23,6 @@ public class MovieService {
     public MovieService(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
     }
-
-
-//    public List<Movie> listMovies() {
-//        //Type targetListType = new TypeToken<List<MovieDto>>(){}.getType();
-//        return movies;
-//    }
 
 
 

@@ -35,10 +35,13 @@ public class MovieController {
     public void deleteMovie(@PathVariable Long id) {
        movieService.deleteMovie(id);
     }
+
     @PostMapping("/{id}/Rate")
     public void addRate(@PathVariable long id, @RequestBody RateCommand command) {
         movieService.addRate(id, command);
     }
+
+
 
 
 }
