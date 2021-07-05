@@ -26,10 +26,15 @@ class LocationsControllerTest {
     void getLocations() {
         when(locationsService.getLocations())
                 .thenReturn(List.of(
-                        new Location(1L,"Budapest",43.112,19.227) ,
-                        new Location(1L,"Pécs",43.112,19.227)
+                        new LocationDTO("Budapest",43.112,19.227) ,
+                        new LocationDTO("Pécs",43.112,19.227)
                         )
                 );
-        assertThat(locationsController.getLocations()).isEqualTo("[Location(id=1, name=Budapest, lat=43.112, lon=19.227), Location(id=1, name=Pécs, lat=43.112, lon=19.227)]");
+        assertThat(locationsController.getLocations()).isEqualTo(
+                List.of(
+                        new LocationDTO("Budapest",43.112,19.227) ,
+                        new LocationDTO("Pécs",43.112,19.227)
+                )
+        );
     }
 }

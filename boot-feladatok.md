@@ -15,7 +15,7 @@ Kérlek jelöld be, hogy melyik gyakorlati feladatokat oldottad meg!
 * [x] Java alkalmazások Dockerrel
 * [x] Docker Layers
 * [x] Feltöltés GIT repository-ba
-* [ ] REST webszolgáltatások - GET művelet
+* [x] REST webszolgáltatások - GET művelet
 * [ ] GET műveletek paraméterezése
 * [ ] REST webszolgáltatások POST és DELETE művelet
 * [ ] Státuszkódok és hibakezelés

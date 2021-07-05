@@ -6,6 +6,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/locations")
 public class LocationsController {
@@ -17,8 +19,9 @@ public class LocationsController {
     }
 
     @GetMapping
-    public String getLocations() {
-        return locationsService.getLocations().toString();
+    public List<LocationDTO> getLocations() {
+
+        return locationsService.getLocations();
     }
 
 }

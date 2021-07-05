@@ -1,6 +1,10 @@
 package locations;
 
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.batch.BatchDataSource;
+import org.springframework.context.annotation.Bean;
 
 import java.util.List;
 
@@ -11,11 +15,15 @@ class LocationsServiceTest {
 
     @Test
     void getLocations() {
-        LocationsService service = new LocationsService();
+
+        ModelMapper modelMapper = new ModelMapper();
+
+        LocationsService service = new LocationsService(modelMapper);
+
         assertThat(service.getLocations()).isEqualTo(
                 List.of(
-                        new Location(1L,"Budapest",43.112,19.227) ,
-                        new Location(1L,"Pécs",43.112,19.227)
+                        new LocationDTO("Budapest",43.112,19.227) ,
+                        new LocationDTO("Pécs",43.112,19.227)
 
                 )
         );
