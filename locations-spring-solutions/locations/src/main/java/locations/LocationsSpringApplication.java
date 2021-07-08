@@ -9,10 +9,6 @@ import org.springframework.context.annotation.Bean;
 @SpringBootApplication
 public class LocationsSpringApplication {
 
-    @Bean
-    LocationsService locationsService() {
-        return new LocationsService();
-    };
 
     @Bean
     ModelMapper modelMapper () {

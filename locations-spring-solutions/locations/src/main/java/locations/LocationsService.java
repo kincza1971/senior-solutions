@@ -47,7 +47,7 @@ public class LocationsService {
         return locations.stream()
                 .filter(l -> l.getId()==id)
                 .findAny()
-                .orElseThrow(() -> new IllegalArgumentException("Cannot find location with this id: " +id));
+                .orElseThrow(() -> new LocationNotFoundException("Cannot find location with this id: " +id));
     }
 
     public LocationDTO createLocation(CreateCommand command) {
