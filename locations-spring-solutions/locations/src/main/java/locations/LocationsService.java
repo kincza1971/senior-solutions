@@ -49,4 +49,27 @@ public class LocationsService {
                 .findAny()
                 .orElseThrow(() -> new IllegalArgumentException("Cannot find location with this id: " +id));
     }
+
+    public LocationDTO createLocation(CreateCommand command) {
+        Location location = new Location(
+                idGenerator.incrementAndGet(),
+                command.getName(),
+                command.getLon(),
+                command.getLat()
+        );
+        return modelMapper.map(location, LocationDTO.class);
+    }
+
+    public LocationDTO updateLocationById(long id, UpdateLocationCommand command) {
+        Location location = findById(id);
+        location.setName(command.getName());
+        location.setLon(command.getLon());
+        location.setLat(command.getLat());
+        return modelMapper.map(location, LocationDTO.class);
+    }
+
+    public void deleteLocationById(long id) {
+        Location location = findById(id);
+        locations.remove(location);
+    }
 }

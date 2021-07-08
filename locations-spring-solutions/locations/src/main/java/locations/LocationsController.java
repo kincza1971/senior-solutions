@@ -1,6 +1,7 @@
 package locations;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -23,8 +24,24 @@ public class LocationsController {
     }
 
     @GetMapping("/{id}")
-    public LocationDTO findLocationById(@PathVariable Long id) {
+    public LocationDTO findLocationById(@PathVariable long id) {
         return locationsService.findLocationById(id);
+    }
+
+    @PostMapping()
+    public LocationDTO createLocation(@RequestBody CreateCommand command) {
+        return locationsService.createLocation(command);
+    }
+
+    @PutMapping("/{id)")
+    public LocationDTO updateLocation(@PathVariable long id, @RequestBody UpdateLocationCommand command) {
+        return locationsService.updateLocationById(id, command);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteLocationById(@PathVariable long id) {
+        locationsService.deleteLocationById(id);
     }
 
 }
