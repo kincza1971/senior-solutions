@@ -16,9 +16,9 @@ Kérlek jelöld be, hogy melyik gyakorlati feladatokat oldottad meg!
 * [x] Docker Layers
 * [x] Feltöltés GIT repository-ba
 * [x] REST webszolgáltatások - GET művelet
-* [ ] GET műveletek paraméterezése
-* [ ] REST webszolgáltatások POST és DELETE művelet
-* [ ] Státuszkódok és hibakezelés
+* [x] GET műveletek paraméterezése
+* [x] REST webszolgáltatások POST és DELETE művelet
+* [x] Státuszkódok és hibakezelés
 * [ ] Integrációs tesztelés
 * [ ] Swagger UI
 * [ ] Tesztelés Rest Assured használatával
