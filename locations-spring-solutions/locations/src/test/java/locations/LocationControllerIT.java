@@ -1,15 +1,20 @@
 package locations;
 
 import org.junit.jupiter.api.Test;
+import org.modelmapper.ModelMapper;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+//@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class LocationControllerIT {
 
-    LocationsService locationsService = new LocationsService();
+    ModelMapper modelMapper = new ModelMapper();
+
+    LocationsService locationsService = new LocationsService(modelMapper);
 
     @Test
     void testGetLocations() {

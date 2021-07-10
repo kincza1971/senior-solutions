@@ -13,12 +13,11 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/locations")
+@RequestMapping("api/locations")
 public class LocationsController {
 
     private LocationsService locationsService;
 
-    @Autowired
     public LocationsController(LocationsService locationsService) {
         this.locationsService = locationsService;
     }

@@ -3,6 +3,7 @@ package locations;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -11,8 +12,7 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Service
-@NoArgsConstructor
-@AllArgsConstructor
+
 public class LocationsService {
     private ModelMapper modelMapper;
 
@@ -24,6 +24,7 @@ public class LocationsService {
                     new Location(idGenerator.incrementAndGet(),"Pécs",43.112,19.227)
             )
     );
+
 
     public LocationsService(ModelMapper modelMapper) {
         this.modelMapper = modelMapper;
@@ -54,9 +55,10 @@ public class LocationsService {
         Location location = new Location(
                 idGenerator.incrementAndGet(),
                 command.getName(),
-                command.getLon(),
-                command.getLat()
+                command.getLat(),
+                command.getLon()
         );
+        locations.add(location);
         return modelMapper.map(location, LocationDTO.class);
     }
 
@@ -71,5 +73,10 @@ public class LocationsService {
     public void deleteLocationById(long id) {
         Location location = findById(id);
         locations.remove(location);
+    }
+
+    public void deleteAllLocation() {
+        idGenerator = new AtomicLong();
+        locations.clear();
     }
 }

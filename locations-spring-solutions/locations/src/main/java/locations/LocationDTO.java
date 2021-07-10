@@ -12,4 +12,8 @@ public class LocationDTO {
     private double lat;
     private double lon;
 
+    public String getName() {
+        return name;
+    }
+
 }

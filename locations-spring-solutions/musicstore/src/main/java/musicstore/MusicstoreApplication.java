@@ -9,8 +9,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-//@AllArgsConstructor
-//@NoArgsConstructor
 public class MusicstoreApplication {
 
     @Bean
