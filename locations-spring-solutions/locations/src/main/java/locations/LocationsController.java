@@ -1,6 +1,7 @@
 package locations;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -23,6 +24,7 @@ public class LocationsController {
     }
 
     @GetMapping
+    @Operation(summary = "list all locations or filtered by prefix in request parameter")
     public List<LocationDTO> getLocations(@RequestParam Optional<String> prefix) {
 
         return locationsService.getLocations(prefix);
@@ -35,14 +37,16 @@ public class LocationsController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Create a location based on request body")
+    @ApiResponse(responseCode = "201", description = "location successfully created")
     public LocationDTO createLocation(@RequestBody CreateCommand command) {
         return locationsService.createLocation(command);
     }
 
-    @PutMapping("/{id)")
-    public LocationDTO updateLocation(@PathVariable("id") long id, @RequestBody UpdateLocationCommand command) {
-        return locationsService.updateLocationById(id, command);
-    }
+//    @PutMapping("/{id}")
+//    public LocationDTO updateLocation(@PathVariable("id") long id, @RequestBody UpdateLocationCommand command) {
+//        return locationsService.updateLocationById(id, command);
+//    }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

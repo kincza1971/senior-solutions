@@ -12,8 +12,8 @@ import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 @Service
-
 public class LocationsService {
+
     private ModelMapper modelMapper;
 
     private AtomicLong idGenerator = new AtomicLong();
