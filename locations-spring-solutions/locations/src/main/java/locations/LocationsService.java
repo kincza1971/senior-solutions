@@ -1,9 +1,6 @@
 package locations;
 
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,23 +16,30 @@ public class LocationsService {
     private AtomicLong idGenerator = new AtomicLong();
 
     private List<Location> locations = new ArrayList<>(
-            List.of(
-                    new Location(idGenerator.incrementAndGet(),"Budapest",43.112,19.227) ,
-                    new Location(idGenerator.incrementAndGet(),"Pécs",43.112,19.227)
-            )
+//            List.of(
+//                    new Location(idGenerator.incrementAndGet(),"Budapest",43.112,19.227) ,
+//                    new Location(idGenerator.incrementAndGet(),"Pécs",43.112,19.227)
+//            )
     );
 
+    private LocationsDao locationsDao;
 
-    public LocationsService(ModelMapper modelMapper) {
+
+    public LocationsService(ModelMapper modelMapper, LocationsDao locationsDao) {
         this.modelMapper = modelMapper;
+        this.locationsDao = locationsDao;
     }
 
     public List<LocationDTO> getLocations(Optional<String> prefix) {
 
-        return locations.stream()
-                .filter(l -> prefix.isEmpty() || l.getName().equalsIgnoreCase(prefix.get()))
+        return locationsDao.findAllLocations().stream()
                 .map(l -> modelMapper.map(l,LocationDTO.class))
                 .toList();
+
+//        return locations.stream()
+//                .filter(l -> prefix.isEmpty() || l.getName().equalsIgnoreCase(prefix.get()))
+//                .map(l -> modelMapper.map(l,LocationDTO.class))
+//                .toList();
     }
 
 

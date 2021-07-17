@@ -2,15 +2,12 @@ package locations;
 
 import org.junit.jupiter.api.Test;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.batch.BatchDataSource;
-import org.springframework.context.annotation.Bean;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 class LocationsServiceTest {
 
@@ -18,8 +15,9 @@ class LocationsServiceTest {
     void getLocations() {
 
         ModelMapper modelMapper = new ModelMapper();
+        LocationsDao locationsDao = new LocationsDao(new JdbcTemplate());
 
-        LocationsService service = new LocationsService(modelMapper);
+        LocationsService service = new LocationsService(modelMapper, locationsDao);
 
         assertThat(service.getLocations(Optional.empty())).isEqualTo(
                 List.of(
