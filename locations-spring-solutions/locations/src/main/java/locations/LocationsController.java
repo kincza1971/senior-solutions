@@ -43,10 +43,10 @@ public class LocationsController {
         return locationsService.createLocation(command);
     }
 
-//    @PutMapping("/{id}")
-//    public LocationDTO updateLocation(@PathVariable("id") long id, @RequestBody UpdateLocationCommand command) {
-//        return locationsService.updateLocationById(id, command);
-//    }
+    @PutMapping("/{id}")
+    public LocationDTO updateLocation(@PathVariable("id") long id, @RequestBody UpdateLocationCommand command) {
+        return locationsService.updateLocationById(id, command);
+    }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

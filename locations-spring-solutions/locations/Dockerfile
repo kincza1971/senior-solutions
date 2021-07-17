@@ -1,6 +1,6 @@
 FROM adoptopenjdk:16-jre-hotspot as builder
 WORKDIR application
-COPY target/locations-0.0.1-SNAPSHOT.jar employees.jar
+COPY target/locations-0.0.1-SNAPSHOT.jar locations.jar
 RUN java -Djarmode=layertools -jar locations.jar extract
 
 FROM adoptopenjdk:16-jre-hotspot
