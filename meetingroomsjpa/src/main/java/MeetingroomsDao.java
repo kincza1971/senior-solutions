@@ -5,6 +5,7 @@ import javax.persistence.EntityManagerFactory;
 import java.util.List;
 
 import javax.persistence.EntityManagerFactory;
+import javax.persistence.criteria.CriteriaDelete;
 
 @RequiredArgsConstructor
 public class MeetingroomsDao {
@@ -40,21 +41,42 @@ public class MeetingroomsDao {
 
      
     public List<Meetingroom> getMeetingrooms() {
-        return null;
+        EntityManager em = factory.createEntityManager();
+
+        List<Meetingroom> meetingrooms = em.createQuery("select m from Meetingroom m order by m.id").getResultList();
+
+        em.close();
+
+        return meetingrooms;
+
     }
 
      
-    public List<Meetingroom> getExactMeetingroomByName(String name) {
-        return null;
+    public List<Meetingroom> findMeetingroomByName(String name) {
+        EntityManager em = factory.createEntityManager();
+
+        List<Meetingroom> meetingrooms =em.createQuery("select m from Meetingroom m where m.name = :name")
+                .setParameter("name",name)
+                .getResultList();
+        em.close();
+        return meetingrooms;
     }
 
      
-    public List<Meetingroom> getMeetingroomsByPrefix(String nameOrPrefix) {
-        return null;
+    public List<Meetingroom> findMeetingroomsByPrefix(String nameOrPrefix) {
+        EntityManager em = factory.createEntityManager();
+
+        List<Meetingroom> meetingrooms =em.createQuery("select m from Meetingroom m where m.name like :name")
+                .setParameter("name",nameOrPrefix+"%")
+                .getResultList();
+        em.close();
+        return meetingrooms;
     }
 
      
     public void deleteAll() {
-
+        EntityManager em = factory.createEntityManager();
+        em.createQuery("delete from Meetingroom m");
+        em.close();
     }
 }
