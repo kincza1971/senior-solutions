@@ -4,13 +4,15 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name="locations")
+@Table(name="activities")
 public class Activity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private LocalDateTime startTime;
     private String description;
+    @Enumerated(EnumType.STRING)
+    @Column(length = 15, nullable = false)
     private ActivityType type;
 
     public Activity() {
@@ -52,6 +54,16 @@ public class Activity {
 
     public void setType(ActivityType type) {
         this.type = type;
+    }
+
+    @Override
+    public String toString() {
+        return "Activity{" +
+                "id=" + id +
+                ", startTime=" + startTime +
+                ", description='" + description + '\'' +
+                ", type=" + type +
+                '}';
     }
 }
 
