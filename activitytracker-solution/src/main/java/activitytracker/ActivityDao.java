@@ -12,7 +12,15 @@ public class ActivityDao {
         this.entityManagerFactory = entityManagerFactory;
     }
 
-    public void saveActivity( Activity activity) {
+    public void saveActivity( LocalDateTime startTime, String description, ActivityType type) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        entityManager.getTransaction().begin();
+        entityManager.persist(new Activity(startTime,description,type));
+        entityManager.getTransaction().commit();
+        entityManager.close();
+    }
+
+    public void saveActivity(Activity activity) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
         entityManager.persist(activity);
@@ -20,15 +28,15 @@ public class ActivityDao {
         entityManager.close();
     }
 
-    public void updateActivity(Activity activity) {
+    public void updateActivity( long id, String description) {
         EntityManager entityManager = entityManagerFactory.createEntityManager();
         entityManager.getTransaction().begin();
 
-        Activity activity1 = entityManager.find(Activity.class, activity.getId());
+        Activity activity1 = entityManager.find(Activity.class, id);
 
-        activity1.setType(activity.getType());
-        activity1.setStartTime(activity.getStartTime()) ;
-        activity1.setDescription(activity.getDescription()) ;
+//        activity1.setType(activity.getType());
+//        activity1.setStartTime(activity.getStartTime()) ;
+        activity1.setDescription(description) ;
 
         entityManager.getTransaction().commit();
         entityManager.close();
@@ -60,13 +68,42 @@ public class ActivityDao {
         return activity;
     }
 
+    public Activity findActivityByIdWithLabels(long id) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Activity activity =  entityManager
+                .createQuery("select a from Activity a left join fetch a.labels where a.id = :id",Activity.class)
+                .setParameter("id",id)
+                .getSingleResult();
+        entityManager.close();
+        return activity;
+    }
+
+    public Activity findActivityByIdWithTrackPoints(long id) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        Activity activity =  entityManager
+                .createQuery("select a from Activity a left join fetch a.trackPoints where a.id = :id order by a.id",Activity.class)
+                .setParameter("id",id)
+                .getSingleResult();
+        entityManager.close();
+        return activity;
+    }
+
     public List<Activity> findTrackPointCoordinatesByDate(LocalDateTime afterThis) {
         EntityManager em = entityManagerFactory.createEntityManager();
-        List<Activity> coordinates = em.createQuery("Select a from Activity a  where a.startTime > :time", Activity.class)
+        List<Activity> coordinates = em.createQuery("Select a from Activity a where a.startTime > :time", Activity.class)
                 .setParameter("time", afterThis)
                 .getResultList();
         em.close();
         return coordinates;
+    }
+
+    public Activity updateActivityByMerge(Activity changedActivity) {
+        EntityManager em = entityManagerFactory.createEntityManager();
+        em.getTransaction().begin();
+        em.merge(changedActivity);
+        em.getTransaction().commit();
+        em.close();
+        return findActivityById(changedActivity.getId());
     }
 
 }

@@ -40,10 +40,11 @@ public class MeetingroomsDao {
     }
 
      
-    public List<Meetingroom> getMeetingrooms() {
+    public List<String> getMeetingrooms() {
         EntityManager em = factory.createEntityManager();
 
-        List<Meetingroom> meetingrooms = em.createQuery("select m from Meetingroom m order by m.id").getResultList();
+        List<String> meetingrooms =
+                em.createQuery("select m.name from Meetingroom m order by m.name",String.class).getResultList();
 
         em.close();
 
@@ -55,7 +56,7 @@ public class MeetingroomsDao {
     public List<Meetingroom> findMeetingroomByName(String name) {
         EntityManager em = factory.createEntityManager();
 
-        List<Meetingroom> meetingrooms =em.createQuery("select m from Meetingroom m where m.name = :name")
+        List<Meetingroom> meetingrooms =em.createQuery("select m from Meetingroom m where m.name = :name", Meetingroom.class)
                 .setParameter("name",name)
                 .getResultList();
         em.close();
@@ -66,7 +67,7 @@ public class MeetingroomsDao {
     public List<Meetingroom> findMeetingroomsByPrefix(String nameOrPrefix) {
         EntityManager em = factory.createEntityManager();
 
-        List<Meetingroom> meetingrooms =em.createQuery("select m from Meetingroom m where m.name like :name")
+        List<Meetingroom> meetingrooms =em.createQuery("select m from Meetingroom m where m.name like :name", Meetingroom.class)
                 .setParameter("name",nameOrPrefix+"%")
                 .getResultList();
         em.close();
@@ -76,7 +77,9 @@ public class MeetingroomsDao {
      
     public void deleteAll() {
         EntityManager em = factory.createEntityManager();
-        em.createQuery("delete from Meetingroom m");
+        em.getTransaction().begin();
+        em.createQuery("delete from Meetingroom m").executeUpdate();
+        em.getTransaction().commit();
         em.close();
     }
 }
